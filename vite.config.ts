@@ -3,40 +3,31 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 
-const rawPort = process.env.PORT || "5173";
-const port = Number(rawPort);
-const basePath = process.env.BASE_PATH || "/";
+const port = Number(process.env.PORT) || 5173;
 
 export default defineConfig({
-  base: basePath,
+  base: "/", // ✅ Important for Vercel
   plugins: [
     react(),
     tailwindcss(),
   ],
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "src"),
-      "@assets": path.resolve(import.meta.dirname, "src", "assets"),
+      "@": path.resolve(__dirname, "src"),
+      "@assets": path.resolve(__dirname, "src/assets"),
     },
     dedupe: ["react", "react-dom"],
   },
-  root: path.resolve(import.meta.dirname),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist"),
+    outDir: "dist",        // ✅ MUST be simple string
     emptyOutDir: true,
   },
   server: {
     port,
     host: "0.0.0.0",
-    allowedHosts: true,
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
-    },
   },
   preview: {
     port,
     host: "0.0.0.0",
-    allowedHosts: true,
   },
 });
